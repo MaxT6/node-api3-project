@@ -79,7 +79,20 @@ router.get('/:id/posts', validateUserId, async (req, res, next) => {
   }
 });
 
-router.post('/:id/posts', validateUserId, validatePost, (req, res,) => {
+router.post('/:id/posts', validateUserId, validatePost, async (req, res, next) => {
+
+  try {
+    // throw new Error('demons!')
+    const result = await Post.insert({
+      user_id: req.params.id, 
+      text: req.text,
+    })
+    res.status(201).json(result)
+  } catch (err) {
+    next(err)
+  }
+
+
   // console.log(req.user)
   // console.log(req.text)
   // RETURN THE NEWLY CREATED USER POST

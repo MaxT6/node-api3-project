@@ -39,9 +39,15 @@ router.post('/', validateUser, (req, res, next) => {
   // this needs a middleware to check that the request body is valid
 });
 
-router.put('/:id', validateUserId, validateUser, (req, res) => {
+router.put('/:id', validateUserId, validateUser, (req, res, next) => {
   console.log(req.user)
   console.log(req.name)
+
+  User.update(req.params.id, { name: req.name })
+  .then(updatedUser => {
+    res.json(updatedUser)
+  })
+  .catch(next)
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid

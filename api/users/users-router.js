@@ -67,19 +67,26 @@ try {
   // this needs a middleware to verify user id
 });
 
-router.get('/:id/posts', validateUserId, (req, res) => {
+router.get('/:id/posts', validateUserId, async (req, res, next) => {
   console.log(req.user)
   // RETURN THE ARRAY OF USER POSTS
   // this needs a middleware to verify user id
+  try {
+    const result = await User.getUserPosts(req.params.id)
+    res.json(result)
+  } catch (err) {
+    next(err)
+  }
 });
 
-router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-  console.log(req.user)
-  console.log(req.text)
+router.post('/:id/posts', validateUserId, validatePost, (req, res,) => {
+  // console.log(req.user)
+  // console.log(req.text)
   // RETURN THE NEWLY CREATED USER POST
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
-});
+
+})
 
 router.use((err, reg, res, next) => {
   res.status(err.status || 500).json({
